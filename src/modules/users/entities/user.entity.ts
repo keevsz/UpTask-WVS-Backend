@@ -10,6 +10,13 @@ export class User extends Document {
   username: string;
 
   @Prop({
+    required: true,
+    trim: true,
+    index: true,
+  })
+  password: string;
+
+  @Prop({
     type: String,
     required: true,
   })
@@ -40,6 +47,20 @@ export class User extends Document {
     required: false,
   })
   verified_email: string;
+
+  @Prop({
+    type: Boolean,
+    required: true,
+    default: true,
+  })
+  isActive: boolean;
+
+  @Prop({
+    type: String,
+    required: true,
+    default: 'admin',
+  })
+  role: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User).set(
