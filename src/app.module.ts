@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './modules/users/users.module';
+import { RolesModule } from './modules/roles/roles.module';
 
 @Module({
   imports: [
@@ -9,6 +10,7 @@ import { UsersModule } from './modules/users/users.module';
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.DATABASE_HOST),
+    RolesModule,
     UsersModule,
   ],
 })
