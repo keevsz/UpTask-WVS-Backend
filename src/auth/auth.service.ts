@@ -55,17 +55,16 @@ export class AuthService {
         'password',
         'firstName',
         'lastName',
-        'avatar',
         'isActive',
         'role',
       ])
       .lean()
       .exec();
 
-    if (!user) throw new UnauthorizedException('Invalid credentials');
+    if (!user) throw new UnauthorizedException('Credenciales invalidas');
 
     if (!bcrypt.compareSync(password, user.password))
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Credenciales invalidas');
 
     delete user.password;
     return {
