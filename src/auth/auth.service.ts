@@ -57,6 +57,11 @@ export class AuthService {
         'lastName',
         'isActive',
         'role',
+        'avatar',
+        'address',
+        'email',
+        'gender',
+        'phone_number',
       ])
       .lean()
       .exec();
