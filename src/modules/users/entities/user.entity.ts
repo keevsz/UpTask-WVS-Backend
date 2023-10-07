@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { ValidRoles } from 'src/auth/interfaces/valid-roles.interface';
 
 @Schema()
 export class User extends Document {
@@ -51,9 +52,47 @@ export class User extends Document {
   @Prop({
     type: String,
     required: true,
-    default: 'user',
+    default: ValidRoles.USER,
   })
   role: string;
+
+  @Prop({
+    type: String,
+    required: false,
+    default: process.env.INITIAL_DATA_USER_AVATAR,
+  })
+  avatar: string;
+
+  @Prop({
+    type: String,
+    required: false,
+  })
+  address: string;
+
+  @Prop({
+    type: String,
+    required: false,
+    unique: false,
+  })
+  email: string;
+
+  @Prop({
+    type: String,
+    required: false,
+  })
+  phone_number: string;
+
+  @Prop({
+    type: String,
+    required: false,
+  })
+  gender: string;
+
+  @Prop({
+    type: [{ type: Types.ObjectId }],
+    required: false,
+  })
+  assigned_projects: Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User).set(
