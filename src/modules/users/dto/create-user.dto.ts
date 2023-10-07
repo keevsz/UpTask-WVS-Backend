@@ -18,7 +18,7 @@ export class CreateUserDto {
   lastName: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   avatar: string;
 
   @IsString()
@@ -30,10 +30,10 @@ export class CreateUserDto {
   email: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   phone_number: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   gender: string;
 }

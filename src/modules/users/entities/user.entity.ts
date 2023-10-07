@@ -72,6 +72,7 @@ export class User extends Document {
   @Prop({
     type: String,
     required: false,
+    unique: false,
   })
   email: string;
 
