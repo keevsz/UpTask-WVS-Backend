@@ -52,7 +52,10 @@ export class UsersService {
     if (!userExists) {
       throw new NotFoundException(`El usuario de ID: ${id} no existe `);
     }
-    if (updateUserDto.username) {
+    if (
+      updateUserDto.username &&
+      updateUserDto.username !== userExists.username
+    ) {
       const existUsername = await this.userModel.findOne({
         username: updateUserDto.email,
       });
