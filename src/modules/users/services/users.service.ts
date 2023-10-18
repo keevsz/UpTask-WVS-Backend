@@ -7,7 +7,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../entities/user.entity';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Role } from 'src/modules/roles/entities/role.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -43,8 +43,16 @@ export class UsersService {
     return this.userModel.find();
   }
 
-  findOne(id: string) {
-    return this.userModel.findById(id);
+  async findOne(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException(`Invalid Object ID`);
+    }
+
+    const userExists = await this.userModel.findById(id);
+    if (!userExists) {
+      throw new NotFoundException(`El usuario con ID: ${id} no existe`);
+    }
+    return userExists;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {

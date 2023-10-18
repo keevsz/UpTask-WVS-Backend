@@ -23,6 +23,7 @@ import { ValidRoles } from 'src/auth/interfaces/valid-roles.interface';
   ],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {
   constructor(
