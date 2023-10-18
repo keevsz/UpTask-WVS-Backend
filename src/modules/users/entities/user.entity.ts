@@ -16,6 +16,7 @@ export class User extends Document {
     required: true,
     trim: true,
     index: true,
+    select: false,
   })
   password: string;
 

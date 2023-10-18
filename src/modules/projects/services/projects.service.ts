@@ -36,7 +36,9 @@ export class ProjectsService {
             { creator: { $in: filterProjectsDto.user } },
           ],
         })
-        .select('-tasks');
+        .select('-tasks')
+        .populate('creator');
+
       return projects;
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -45,19 +47,19 @@ export class ProjectsService {
 
   async findOne(id: string, user: User) {
     try {
-      const project = await this.projectModel.findById(id).populate({
-        path: 'tasks',
-        populate: {
-          path: 'collaborators',
-          select: 'name',
-        },
-      });
+      const project = await this.projectModel
+        .findById(id)
+        .populate({
+          path: 'tasks',
+        })
+        .populate('collaborators', 'username')
+        .populate('creator');
 
       if (!project)
         throw new NotFoundException(`Proyecto de ID ${id} no encontrado`);
 
       if (
-        project.creator.toString() !== user._id.toString() &&
+        project.creator._id.toString() !== user._id.toString() &&
         !project.collaborators.some(
           (colaborador) => colaborador._id.toString() === user._id.toString(),
         )
