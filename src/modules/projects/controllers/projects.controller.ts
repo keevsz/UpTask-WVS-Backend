@@ -25,8 +25,9 @@ export class ProjectsController {
   }
 
   @Get()
-  findAll(@Body() filterProjectsDto: FilterProjectsDto) {
-    return this.projectsService.findAll(filterProjectsDto);
+  @Auth()
+  findAll(@GetUser() user: User) {
+    return this.projectsService.findAll(user);
   }
 
   @Get(':id')

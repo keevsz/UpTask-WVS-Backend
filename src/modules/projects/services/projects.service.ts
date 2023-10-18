@@ -27,13 +27,13 @@ export class ProjectsService {
     return newProject;
   }
 
-  async findAll(filterProjectsDto: FilterProjectsDto) {
+  async findAll(user: User) {
     try {
       const projects = await this.projectModel
         .find({
           $or: [
-            { colaborators: { $in: filterProjectsDto.user } },
-            { creator: { $in: filterProjectsDto.user } },
+            { collaborators: { $in: [user._id.toString()] } },
+            { creator: user._id.toString() },
           ],
         })
         .select('-tasks')

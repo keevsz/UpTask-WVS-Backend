@@ -4,10 +4,10 @@ import { User } from 'src/modules/users/entities/user.entity';
 
 @Schema()
 export class Project extends Document {
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, trim: true })
   name: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: true, trim: true })
   description: string;
 
   @Prop({ type: Date, required: true, UTC: true })
