@@ -43,15 +43,27 @@ export class TasksService {
     return `This action returns all tasks`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  async findOne(id: string, user: User) {
+    try {
+      const task = await this.taskModel.findById(id).populate('project');
+      console.log({ task });
+
+      if (!task) throw new NotFoundException(`Tarea no encontrada ID:${id}`);
+
+      if ((task.project as any).creator.toString() !== user._id.toString()) {
+        throw new NotFoundException(`Acción no valida`);
+      }
+      return task;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
+  update(id: string, updateTaskDto: UpdateTaskDto) {
     return `This action updates a #${id} task`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} task`;
   }
 }
