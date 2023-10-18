@@ -70,11 +70,43 @@ export class ProjectsService {
     }
   }
 
-  update(id: string, updateProjectDto: UpdateProjectDto) {
-    return `This action updates a #${id} project`;
+  async update(id: string, updateProjectDto: UpdateProjectDto, user: User) {
+    try {
+      const project = await this.projectModel.findById(id);
+
+      if (!project)
+        throw new NotFoundException(`Proyecto de ID ${id} no encontrado`);
+
+      if (project.creator.toString() !== user._id.toString()) {
+        throw new BadRequestException(`Acción no valida`);
+      }
+
+      const updatedProject = await this.projectModel.findByIdAndUpdate(
+        id,
+        updateProjectDto,
+        { new: true },
+      );
+      return updatedProject;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} project`;
+  async remove(id: string, user: User) {
+    try {
+      const project = await this.projectModel.findById(id);
+
+      if (!project)
+        throw new NotFoundException(`Proyecto de ID ${id} no encontrado`);
+
+      if (project.creator.toString() !== user._id.toString()) {
+        throw new BadRequestException(`Acción no valida`);
+      }
+
+      await project.deleteOne();
+      return 'Proyecto eliminado';
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }

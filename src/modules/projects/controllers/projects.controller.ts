@@ -36,12 +36,18 @@ export class ProjectsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
-    return this.projectsService.update(id, updateProjectDto);
+  @Auth()
+  update(
+    @Param('id') id: string,
+    @Body() updateProjectDto: UpdateProjectDto,
+    @GetUser() user: User,
+  ) {
+    return this.projectsService.update(id, updateProjectDto, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.projectsService.remove(id);
+  @Auth()
+  remove(@Param('id') id: string, @GetUser() user: User) {
+    return this.projectsService.remove(id, user);
   }
 }
