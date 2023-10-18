@@ -61,7 +61,7 @@ export class ProjectsService {
       if (
         project.creator._id.toString() !== user._id.toString() &&
         !project.collaborators.some(
-          (colaborador) => colaborador._id.toString() === user._id.toString(),
+          (collaborator) => collaborator._id.toString() === user._id.toString(),
         )
       ) {
         throw new BadRequestException(`Acción no valida`);

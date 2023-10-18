@@ -3,7 +3,7 @@ import { Document, Types } from 'mongoose';
 import { Project } from 'src/modules/projects/entities/project.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 
-enum TYPE_PRIORITY {
+export enum TYPE_PRIORITY {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
