@@ -48,7 +48,7 @@ export class ProjectsService {
       const project = await this.projectModel.findById(id).populate({
         path: 'tasks',
         populate: {
-          path: 'colaborators',
+          path: 'collaborators',
           select: 'name',
         },
       });
@@ -58,7 +58,7 @@ export class ProjectsService {
 
       if (
         project.creator.toString() !== user._id.toString() &&
-        !project.colaborators.some(
+        !project.collaborators.some(
           (colaborador) => colaborador._id.toString() === user._id.toString(),
         )
       ) {

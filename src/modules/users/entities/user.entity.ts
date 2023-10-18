@@ -6,6 +6,7 @@ import { ValidRoles } from 'src/auth/interfaces/valid-roles.interface';
 @Schema()
 export class User extends Document {
   @Prop({
+    lowercase: true,
     unique: true,
     index: true,
   })

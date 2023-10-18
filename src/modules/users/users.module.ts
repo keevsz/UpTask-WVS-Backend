@@ -7,6 +7,8 @@ import { UserSchema } from 'src/modules/users/entities/user.entity';
 import { Role, RoleSchema } from '../roles/entities/role.entity';
 import { Model } from 'mongoose';
 import { ValidRoles } from 'src/auth/interfaces/valid-roles.interface';
+import { CollaboratorsController } from './controllers/collaborators.controller';
+import { CollaboratorsService } from './services/collaborators.service';
 
 @Module({
   imports: [
@@ -21,8 +23,8 @@ import { ValidRoles } from 'src/auth/interfaces/valid-roles.interface';
       },
     ]),
   ],
-  controllers: [UsersController],
-  providers: [UsersService],
+  controllers: [UsersController, CollaboratorsController],
+  providers: [UsersService, CollaboratorsService],
   exports: [UsersService],
 })
 export class UsersModule {

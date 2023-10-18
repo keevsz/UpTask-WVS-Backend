@@ -23,7 +23,7 @@ export class Project extends Document {
   tasks: Types.ObjectId[];
 
   @Prop({ type: [{ type: Types.ObjectId, ref: User.name }], required: false })
-  colaborators: Types.ObjectId[];
+  collaborators: Types.ObjectId[];
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project).set(
