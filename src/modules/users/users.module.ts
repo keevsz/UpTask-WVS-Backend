@@ -9,6 +9,8 @@ import { Model } from 'mongoose';
 import { ValidRoles } from 'src/auth/interfaces/valid-roles.interface';
 import { CollaboratorsController } from './controllers/collaborators.controller';
 import { CollaboratorsService } from './services/collaborators.service';
+import { Project, ProjectSchema } from '../projects/entities/project.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -21,7 +23,12 @@ import { CollaboratorsService } from './services/collaborators.service';
         name: Role.name,
         schema: RoleSchema,
       },
+      {
+        name: Project.name,
+        schema: ProjectSchema,
+      },
     ]),
+    AuthModule,
   ],
   controllers: [UsersController, CollaboratorsController],
   providers: [UsersService, CollaboratorsService],
