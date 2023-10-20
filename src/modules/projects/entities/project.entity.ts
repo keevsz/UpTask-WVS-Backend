@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { Task } from 'src/modules/tasks/entities/task.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 
 @Schema()
@@ -19,7 +20,7 @@ export class Project extends Document {
   @Prop({ type: Types.ObjectId, ref: User.name, required: true })
   creator: Types.ObjectId;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: User.name }], required: false })
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Task' }], required: false })
   tasks: Types.ObjectId[];
 
   @Prop({ type: [{ type: Types.ObjectId, ref: User.name }], required: false })

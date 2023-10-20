@@ -49,10 +49,8 @@ export class ProjectsService {
     try {
       const project = await this.projectModel
         .findById(id)
-        .populate({
-          path: 'tasks',
-        })
         .populate('collaborators', 'username')
+        .populate('tasks')
         .populate('creator');
 
       if (!project)
