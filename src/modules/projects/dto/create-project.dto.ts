@@ -14,7 +14,6 @@ export class CreateProjectDto {
   deadline: Date;
 
   @IsString()
-  @IsNotEmpty()
   client: string;
 
   @IsMongoId()

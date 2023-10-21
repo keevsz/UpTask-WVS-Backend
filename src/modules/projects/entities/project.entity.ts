@@ -14,7 +14,7 @@ export class Project extends Document {
   @Prop({ type: Date, required: true, UTC: true })
   deadline: Date;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: false })
   client: string;
 
   @Prop({ type: Types.ObjectId, ref: User.name, required: true })
