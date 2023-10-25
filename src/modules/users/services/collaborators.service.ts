@@ -89,4 +89,9 @@ export class CollaboratorsService {
     });
     return 'Colaborador eliminado';
   }
+
+  async getCollaboratorsOfProjects() {
+    const projects = await this.projectModel.find().populate('collaborators');
+    return projects;
+  }
 }

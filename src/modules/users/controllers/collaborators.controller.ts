@@ -37,4 +37,9 @@ export class CollaboratorsController {
       user,
     );
   }
+
+  @Get()
+  getCollaboratorsOfProjects() {
+    return this.collaboratorsService.getCollaboratorsOfProjects();
+  }
 }

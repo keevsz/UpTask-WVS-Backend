@@ -89,12 +89,6 @@ export class User extends Document {
     required: false,
   })
   gender: string;
-
-  @Prop({
-    type: [{ type: Types.ObjectId }],
-    required: false,
-  })
-  assigned_projects: Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User).set(
