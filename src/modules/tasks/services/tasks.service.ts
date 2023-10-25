@@ -63,7 +63,6 @@ export class TasksService {
   async findOne(id: string, user: User) {
     try {
       const task = await this.taskModel.findById(id).populate('project');
-      console.log({ task });
 
       if (!task) throw new NotFoundException(`Tarea no encontrada ID:${id}`);
 
@@ -76,11 +75,84 @@ export class TasksService {
     }
   }
 
-  update(id: string, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
+  async update(id: string, updateTaskDto: UpdateTaskDto, user: User) {
+    const task = await this.taskModel.findById(id).populate('project');
+    if (!task) {
+      throw new NotFoundException(`Tarea no encontrada ID: ${task}`);
+    }
+
+    if ((task.project as any).creator.toString() !== user._id.toString()) {
+      throw new BadRequestException(`Acción no valida`);
+    }
+
+    const taskUpdated = await this.taskModel.findByIdAndUpdate(
+      id,
+      { ...updateTaskDto, project: task.project },
+      {
+        new: true,
+      },
+    );
+    return taskUpdated;
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} task`;
+  async remove(id: string, user: User) {
+    try {
+      const task = await this.taskModel.findById(id).populate('project');
+
+      if (!task) {
+        throw new NotFoundException(`Tarea no encontrada ID: ${id}`);
+      }
+
+      if ((task.project as any).creator.toString() !== user._id.toString()) {
+        throw new BadRequestException(`Acción no valida`);
+      }
+
+      await this.projectModel.findByIdAndUpdate(task.project, {
+        $pull: { tasks: task._id },
+      });
+      await task.deleteOne();
+      return `Tarea eliminada`;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async changeStatus(id: string, user: User) {
+    try {
+      const task = await this.taskModel.findById(id).populate('project');
+
+      if (!task) {
+        throw new NotFoundException(`Tarea no encontrada ID: ${id}`);
+      }
+
+      if (
+        (task.project as unknown as Project).creator.toString() !==
+          user._id.toString() &&
+        !(task.project as any).collaborators.some(
+          (collaborator: User) =>
+            collaborator._id.toString() === user._id.toString(),
+        )
+      ) {
+        throw new BadRequestException(`Acción no valida`);
+      }
+
+      const taskUpdated = await this.taskModel
+        .findByIdAndUpdate(
+          id,
+          {
+            status: !task.status,
+            completed: user._id,
+          },
+          {
+            new: true,
+          },
+        )
+        .populate('project')
+        .populate('completed');
+
+      return taskUpdated;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }
