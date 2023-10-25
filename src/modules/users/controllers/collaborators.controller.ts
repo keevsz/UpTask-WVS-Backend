@@ -12,7 +12,7 @@ import { User } from '../entities/user.entity';
 export class CollaboratorsController {
   constructor(private readonly collaboratorsService: CollaboratorsService) {}
 
-  @Get('/')
+  @Post('/')
   findOne(@Body() getCollaboratorDto: GetCollaboratorDto) {
     return this.collaboratorsService.findOne(getCollaboratorDto);
   }
