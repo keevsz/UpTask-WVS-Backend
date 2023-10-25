@@ -25,8 +25,9 @@ export class TasksController {
   }
 
   @Get()
-  findAll() {
-    return this.tasksService.findAll();
+  @Auth()
+  findAll(@GetUser() user: User) {
+    return this.tasksService.findAll(user);
   }
 
   @Get(':id')

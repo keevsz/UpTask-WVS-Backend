@@ -39,8 +39,25 @@ export class TasksService {
     return newTask;
   }
 
-  findAll() {
-    return `This action returns all tasks`;
+  async findAll(user: User) {
+    try {
+      const tasks = await this.taskModel.find().populate({
+        path: 'project',
+        populate: {
+          path: 'creator',
+          match: [{ _id: user._id }, { collaborators: user._id }],
+        },
+      });
+
+      if (!tasks)
+        throw new NotFoundException(
+          `Tareas no encontrada UsuarioId:${user._id}`,
+        );
+
+      return tasks;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async findOne(id: string, user: User) {
