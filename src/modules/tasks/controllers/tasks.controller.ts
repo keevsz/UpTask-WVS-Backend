@@ -50,4 +50,10 @@ export class TasksController {
   remove(@Param('id') id: string, @GetUser() user: User) {
     return this.tasksService.remove(id, user);
   }
+
+  @Patch('/change-status/:id')
+  @Auth()
+  changeStatus(@Param('id') id: string, @GetUser() user: User) {
+    return this.tasksService.changeStatus(id, user);
+  }
 }

@@ -99,4 +99,43 @@ export class TasksService {
       throw new BadRequestException(error.message);
     }
   }
+
+  async changeStatus(id: string, user: User) {
+    try {
+      const task = await this.taskModel.findById(id).populate('project');
+
+      if (!task) {
+        throw new NotFoundException(`Tarea no encontrada ID: ${id}`);
+      }
+
+      if (
+        (task.project as unknown as Project).creator.toString() !==
+          user._id.toString() &&
+        !(task.project as any).collaborators.some(
+          (collaborator: User) =>
+            collaborator._id.toString() === user._id.toString(),
+        )
+      ) {
+        throw new BadRequestException(`Acción no valida`);
+      }
+
+      const taskUpdated = await this.taskModel
+        .findByIdAndUpdate(
+          id,
+          {
+            status: !task.status,
+            completed: user._id,
+          },
+          {
+            new: true,
+          },
+        )
+        .populate('project')
+        .populate('completed');
+
+      return taskUpdated;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
 }
