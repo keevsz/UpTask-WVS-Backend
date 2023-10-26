@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, models } from 'mongoose';
 
 @Schema()
 export class Role extends Document {
@@ -11,9 +11,10 @@ export class Role extends Document {
     index: true,
   })
   name: string;
+
+  @Prop({ type: Boolean, required: true, default: true })
+  state: boolean;
 }
 
-export const RoleSchema = SchemaFactory.createForClass(Role).set(
-  'timestamps',
-  true,
-);
+export const RoleSchema =
+  models.Role || SchemaFactory.createForClass(Role).set('timestamps', true);

@@ -89,7 +89,7 @@ export class UsersService {
     return update;
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    return await this.userModel.findByIdAndDelete(id);
   }
 }

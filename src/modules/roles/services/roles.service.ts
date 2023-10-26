@@ -16,19 +16,21 @@ export class RolesService {
     return newRole;
   }
 
-  findAll() {
-    return `This action returns all roles`;
+  async findAll() {
+    return await this.roleModel.find();
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} role`;
+  async findOne(id: string) {
+    return await this.roleModel.findById(id);
   }
 
-  update(id: string, updateRoleDto: UpdateRoleDto) {
-    return `This action updates a #${id} role`;
+  async update(id: string, updateRoleDto: UpdateRoleDto) {
+    return await this.roleModel.findByIdAndUpdate(id, updateRoleDto, {
+      new: true,
+    });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} role`;
+  async remove(id: string) {
+    return await this.roleModel.findByIdAndDelete(id);
   }
 }

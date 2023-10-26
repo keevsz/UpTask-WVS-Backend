@@ -1,4 +1,4 @@
-import { IsMongoId, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateProjectDto {
   @IsString()
@@ -19,4 +19,7 @@ export class CreateProjectDto {
   @IsMongoId()
   @IsNotEmpty()
   creator: string;
+
+  @IsBoolean()
+  isFinished: boolean;
 }

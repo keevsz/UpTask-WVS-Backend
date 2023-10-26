@@ -25,6 +25,9 @@ export class Project extends Document {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: User.name }], required: false })
   collaborators: Types.ObjectId[];
+
+  @Prop({ type: Boolean, required: false, default: false })
+  isFinished: boolean;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project).set(
