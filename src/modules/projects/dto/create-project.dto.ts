@@ -19,7 +19,4 @@ export class CreateProjectDto {
   @IsMongoId()
   @IsNotEmpty()
   creator: string;
-
-  @IsBoolean()
-  isFinished: boolean;
 }

@@ -52,9 +52,9 @@ export class User extends Document {
   isActive: boolean;
 
   @Prop({
-    type: String,
+    type: Types.ObjectId,
+    ref: 'Role',
     required: true,
-    default: ValidRoles.USER,
   })
   role: string;
 

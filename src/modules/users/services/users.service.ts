@@ -26,21 +26,24 @@ export class UsersService {
         `El nombre de usuario ${createUserDto.username} ya se encuentra registrado`,
       );
 
-    const role = 'user';
-    const roleExists = await this.roleModel.findOne({ name: role });
+    const roleExists = await this.roleModel.findById(createUserDto.role);
+
     if (!roleExists) {
-      throw new BadRequestException(`No se encontró el rol: ${role}`);
+      throw new BadRequestException(
+        `No se encontró el rol: ${createUserDto.role}`,
+      );
     }
 
     const newUser = await this.userModel.create({
       ...createUserDto,
-      role: roleExists.name,
+      isActive: true,
     });
+
     return newUser;
   }
 
   findAll() {
-    return this.userModel.find();
+    return this.userModel.find().populate('role', 'name');
   }
 
   async findOne(id: string) {
@@ -48,7 +51,10 @@ export class UsersService {
       throw new BadRequestException(`Invalid Object ID`);
     }
 
-    const userExists = await this.userModel.findById(id);
+    const userExists = await this.userModel
+      .findById(id)
+      .populate('role', 'name');
+
     if (!userExists) {
       throw new NotFoundException(`El usuario con ID: ${id} no existe`);
     }
@@ -83,13 +89,18 @@ export class UsersService {
 
     if (!updateUserDto.avatar) updateUserDto.avatar === userExists.avatar;
 
-    const update = await this.userModel.findByIdAndUpdate(id, updateUserDto, {
-      new: true,
-    });
+    const update = await this.userModel
+      .findByIdAndUpdate(id, updateUserDto, {
+        new: true,
+      })
+      .populate('role', 'name');
+
     return update;
   }
 
   async remove(id: string) {
+    await this.findOne(id);
+
     return await this.userModel.findByIdAndDelete(id);
   }
 }

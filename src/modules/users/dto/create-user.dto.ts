@@ -1,8 +1,9 @@
+import { Role } from '../../roles/entities/role.entity';
 import {
+  IsBoolean,
   IsEmail,
   IsMongoId,
   IsNotEmpty,
-  IsNumberString,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -13,7 +14,6 @@ export class CreateUserDto {
   username: string;
 
   @IsString()
-  @IsNotEmpty()
   password: string;
 
   @IsString()
@@ -46,6 +46,10 @@ export class CreateUserDto {
   gender: string;
 
   @IsMongoId()
-  @IsOptional()
+  @IsNotEmpty()
   role: string;
+
+  @IsBoolean()
+  @IsNotEmpty()
+  isActive: boolean;
 }

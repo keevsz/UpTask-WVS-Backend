@@ -1,6 +1,7 @@
 export enum ValidRoles {
-  ADMIN = 'admin',
-  USER = 'user',
+  ADMIN = 'ADMINISTRADOR',
+  USER = 'USUARIO',
+  SUPER_USER = 'SUPER USUARIO',
 }
 
-export const Roles = ['admin', 'user'];
+export const Roles = ['ADMINISTRADOR', 'USUARIO', 'SUPER USUARIO'];

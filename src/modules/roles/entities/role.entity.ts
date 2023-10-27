@@ -6,6 +6,7 @@ export class Role extends Document {
   @Prop({
     type: String,
     required: true,
+    uppercase: true,
     lowercase: true,
     unique: true,
     index: true,

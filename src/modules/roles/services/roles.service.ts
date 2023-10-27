@@ -12,7 +12,10 @@ export class RolesService {
   ) {}
 
   async create(createRoleDto: CreateRoleDto) {
-    const newRole = await this.roleModel.create(createRoleDto);
+    const newRole = await this.roleModel.create({
+      ...createRoleDto,
+      state: true,
+    });
     return newRole;
   }
 

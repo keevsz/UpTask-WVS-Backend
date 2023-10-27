@@ -63,6 +63,7 @@ export class AuthService {
         'gender',
         'phone_number',
       ])
+      .populate('role', 'name')
       .lean()
       .exec();
 
