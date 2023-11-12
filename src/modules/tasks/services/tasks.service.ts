@@ -31,7 +31,8 @@ export class TasksService {
       );
     }
 
-    const newTask = await this.taskModel.create(createTaskDto);
+    const order = project.tasks.length + 1;
+    const newTask = await this.taskModel.create({ ...createTaskDto, order });
 
     project.tasks.push(newTask._id);
     await project.save();

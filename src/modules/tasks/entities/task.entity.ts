@@ -31,6 +31,9 @@ export class Task extends Document {
 
   @Prop({ type: Types.ObjectId, ref: User.name })
   completed: Types.ObjectId;
+
+  @Prop({ type: Number, required: true, trim: true })
+  order: number;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task).set(
