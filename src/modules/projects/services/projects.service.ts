@@ -11,11 +11,13 @@ import { Model, Types } from 'mongoose';
 import { UsersService } from 'src/modules/users/services/users.service';
 import { FilterProjectsDto } from '../dto/filter-projects.dto';
 import { User } from 'src/modules/users/entities/user.entity';
+import { Task } from 'src/modules/tasks/entities/task.entity';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectModel(Project.name) private readonly projectModel: Model<Project>,
+    @InjectModel(Task.name) private readonly taskModel: Model<Task>,
     private readonly userService: UsersService,
   ) {}
   async create(createProjectDto: CreateProjectDto) {
@@ -103,6 +105,9 @@ export class ProjectsService {
         throw new BadRequestException(`Acción no valida`);
       }
 
+      await this.taskModel.deleteMany({
+        project: id,
+      });
       await project.deleteOne();
       return 'Proyecto eliminado';
     } catch (error) {
