@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ProjectsModule } from './modules/projects/projects.module';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { TaskModule as TaskSocketModule } from './sockets/task/task.module';
+import { ReportsModule } from './modules/reports/reports.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { TaskModule as TaskSocketModule } from './sockets/task/task.module';
     ProjectsModule,
     TasksModule,
     TaskSocketModule,
+    ReportsModule,
   ],
 })
 export class AppModule {}

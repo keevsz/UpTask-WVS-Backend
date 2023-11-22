@@ -67,8 +67,8 @@ export class ReportsService {
 
     const projectsWithMostTasks = projects.reduce((acc, project) => {
       acc.push({
-        projectName: project.name,
-        tasks: project.tasks.length,
+        proyecto: project.name,
+        tareas: project.tasks.length,
         _id: project._id,
       });
       return acc;
