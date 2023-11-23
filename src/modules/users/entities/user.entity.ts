@@ -56,7 +56,7 @@ export class User extends Document {
     ref: 'Role',
     required: true,
   })
-  role: string;
+  role: Types.ObjectId;
 
   @Prop({
     type: String,

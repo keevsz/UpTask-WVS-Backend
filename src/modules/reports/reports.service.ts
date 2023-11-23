@@ -7,6 +7,7 @@ import { Timestamps } from 'src/types';
 import { User } from '../users/entities/user.entity';
 import { Role } from '../roles/entities/role.entity';
 import { Task } from '../tasks/entities/task.entity';
+
 @Injectable()
 export class ReportsService {
   constructor(
@@ -14,68 +15,133 @@ export class ReportsService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
   async projectsCreated(filter: FilterProjectsCreatedDto) {
-    const projects = await this.projectModel.find({
-      createdAt: {
-        $gte: new Date(filter.from),
-        $lte: new Date(filter.to),
+    const projects = await this.projectModel.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: new Date(filter.from),
+            $lte: new Date(filter.to),
+          },
+        },
       },
-    });
-    const projectsByMonth = projects.reduce((acc, project) => {
-      const key = (project as Project & Timestamps).createdAt
-        .toISOString()
-        .slice(0, 7);
-      acc[key] = (acc[key] || 0) + 1;
-      return acc;
-    }, {});
+      {
+        $project: {
+          _id: 0,
+          year: { $year: '$createdAt' },
+          month: { $month: '$createdAt' },
+        },
+      },
+      {
+        $group: {
+          _id: { year: '$year', month: '$month' },
+          totalProjects: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          year: '$_id.year',
+          month: '$_id.month',
+          totalProjects: 1,
+        },
+      },
+      {
+        $sort: {
+          year: 1,
+          month: 1,
+        },
+      },
+    ]);
 
-    return projectsByMonth;
+    return projects;
   }
 
   async completedProjects() {
-    const projects = await this.projectModel.find();
-    const statuses = ['Completados', 'En progreso'];
-    const projectsCompleted = projects.reduce((acc, project) => {
-      const finished = project.isFinished;
+    const projects = await this.projectModel.aggregate([
+      {
+        $match: {
+          $or: [{ isFinished: true }, { isFinished: false }],
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          isFinished: 1,
+        },
+      },
+      {
+        $group: {
+          _id: '$isFinished',
+          total: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: {
+            $cond: {
+              if: { $eq: ['$_id', true] },
+              then: 'Completados',
+              else: 'Pendientes',
+            },
+          },
+          total: 1,
+        },
+      },
+    ]);
 
-      const key = statuses[finished ? 0 : 1];
-      acc[key] = (acc[key] | 0) + 1;
-      return acc;
-    }, {});
-
-    return projectsCompleted;
+    return projects;
   }
 
   async usersQuantity() {
-    const allUsers = (await this.userModel.find().populate('role')) as (User &
-      PopulatedDoc<Role & Document>)[];
+    const allUsers = await this.userModel.aggregate([
+      {
+        $lookup: {
+          from: 'roles',
+          localField: 'role',
+          foreignField: '_id',
+          as: 'role',
+        },
+      },
+      {
+        $unwind: '$role',
+      },
+      {
+        $group: {
+          _id: '$role.name',
+          total: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          userRole: '$_id',
+          total: 1,
+        },
+      },
+    ]);
 
-    const usersByRole = allUsers.reduce((acc, user) => {
-      const key = user.role.name;
-      acc[key] = (acc[key] | 0) + 1;
-      return acc;
-    }, {});
-    return {
-      total: allUsers.length,
-      usersByRole,
-    };
+    return allUsers;
   }
 
   async projectsTasksQuantity() {
-    const projects = (await this.projectModel
-      .find()
-      .populate('tasks')) as (Project & PopulatedDoc<Task & Document>)[];
+    const projects = await this.projectModel.aggregate([
+      {
+        $lookup: {
+          from: 'tasks',
+          localField: 'tasks',
+          foreignField: '_id',
+          as: 'tasks',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          projectName: '$name',
+          taskCount: { $size: '$tasks' },
+        },
+      },
+    ]);
 
-    const projectsWithMostTasks = projects.reduce((acc, project) => {
-      acc.push({
-        proyecto: project.name,
-        tareas: project.tasks.length,
-        _id: project._id,
-      });
-      return acc;
-    }, []);
-
-    return projectsWithMostTasks.sort(
-      (a: { tasks: number }, b: { tasks: number }) => b.tasks - a.tasks,
-    );
+    return projects;
   }
 }
