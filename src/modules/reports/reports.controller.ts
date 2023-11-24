@@ -34,4 +34,9 @@ export class ReportsController {
   projectsTasksQuantity() {
     return this.reportsService.projectsTasksQuantity();
   }
+
+  @Get('generals')
+  async generals() {
+    return this.reportsService.generals();
+  }
 }

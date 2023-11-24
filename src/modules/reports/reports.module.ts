@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Project, ProjectSchema } from '../projects/entities/project.entity';
 import { Task, TaskSchema } from '../tasks/entities/task.entity';
 import { User, UserSchema } from '../users/entities/user.entity';
+import { Role, RoleSchema } from '../roles/entities/role.entity';
 
 @Module({
   imports: [
@@ -20,6 +21,10 @@ import { User, UserSchema } from '../users/entities/user.entity';
       {
         name: User.name,
         schema: UserSchema,
+      },
+      {
+        name: Role.name,
+        schema: RoleSchema,
       },
     ]),
   ],

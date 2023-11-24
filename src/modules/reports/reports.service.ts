@@ -13,6 +13,8 @@ export class ReportsService {
   constructor(
     @InjectModel(Project.name) private readonly projectModel: Model<Project>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(Role.name) private readonly roleModel: Model<Role>,
+    @InjectModel(Task.name) private readonly taskModel: Model<Task>,
   ) {}
   async projectsCreated(filter: FilterProjectsCreatedDto) {
     const projects = await this.projectModel.aggregate([
@@ -143,5 +145,33 @@ export class ReportsService {
     ]);
 
     return projects;
+  }
+
+  async generals() {
+    const [users, roles, tasks, projects] = await Promise.all([
+      this.userModel.count(),
+      this.roleModel.count(),
+      this.taskModel.count(),
+      this.projectModel.count(),
+    ]);
+
+    return [
+      {
+        item: 'Users',
+        total: users,
+      },
+      {
+        item: 'Roles',
+        total: roles,
+      },
+      {
+        item: 'Tasks',
+        total: tasks,
+      },
+      {
+        item: 'Projects',
+        total: projects,
+      },
+    ];
   }
 }
