@@ -26,7 +26,7 @@ export class Task extends Document {
   @Prop({ type: String, required: true, enum: TYPE_PRIORITY })
   priority: TYPE_PRIORITY;
 
-  @Prop([{ type: Types.ObjectId, ref: 'Project', required: true }])
+  @Prop({ type: Types.ObjectId, ref: 'Project', required: true })
   project: Types.ObjectId;
 
   @Prop({ type: Types.ObjectId, ref: User.name })

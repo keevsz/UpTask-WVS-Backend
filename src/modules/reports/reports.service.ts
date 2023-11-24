@@ -157,19 +157,19 @@ export class ReportsService {
 
     return [
       {
-        item: 'Users',
+        title: 'Usuarios',
         total: users,
       },
       {
-        item: 'Roles',
+        title: 'Roles',
         total: roles,
       },
       {
-        item: 'Tasks',
+        title: 'Tareas',
         total: tasks,
       },
       {
-        item: 'Projects',
+        title: 'Proyectos',
         total: projects,
       },
     ];
